@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { UserType } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
+import { BONUS_PER_VIEW } from 'src/constants';
 import { notFound } from 'src/utils';
 
 const prisma = new PrismaClient();
@@ -32,7 +33,7 @@ export async function balanceAdder(
         id: userId,
       },
       data: {
-        balance: findAdmin.balance + finAsset.bonusPerView,
+        balance: findAdmin.balance + BONUS_PER_VIEW,
       },
     });
 
@@ -55,7 +56,7 @@ export async function balanceAdder(
         id: userId,
       },
       data: {
-        balance: findPromoter.balance + finAsset.bonusPerView,
+        balance: findPromoter.balance + BONUS_PER_VIEW,
       },
     });
 
@@ -65,7 +66,7 @@ export async function balanceAdder(
         id: finAsset.id,
       },
       data: {
-        deposit: finAsset.deposit - finAsset.bonusPerView,
+        deposit: finAsset.deposit - BONUS_PER_VIEW,
       },
     });
 
@@ -79,7 +80,7 @@ export async function balanceAdder(
         profit:
           (
             await prisma.streamStats.findUnique({ where: { streamId } })
-          ).profit + finAsset.bonusPerView,
+          ).profit + BONUS_PER_VIEW,
         views:
           (await prisma.streamStats.findUnique({ where: { streamId } })).views +
           1,

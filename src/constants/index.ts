@@ -30,6 +30,7 @@ enum OperationType {
 }
 
 const AD_CAMPAIGN_BONUS = 1000;
+const BONUS_PER_VIEW = 30;
 const MIN_WITHDRAW_AMOUNT = 100;
 
 const MAIL_CODE_EXPIRE_TIME = 300; //5 minute
@@ -45,4 +46,5 @@ export {
   MIN_WITHDRAW_AMOUNT,
   MAIL_CODE_EXPIRE_TIME,
   MAIL_CODE_RESEND_TIME,
+  BONUS_PER_VIEW,
 };
