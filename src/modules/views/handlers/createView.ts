@@ -102,7 +102,7 @@ export async function createViewHandler(
     }
 
     // Award a bonus to the promoter's account.
-    await balanceAdder(UserType.PROMOTER, stream.promoterId, data.streamId);
+    // await balanceAdder(UserType.PROMOTER, stream.promoterId, data.streamId);
   }
 
   /**
