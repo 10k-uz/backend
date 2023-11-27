@@ -1,0 +1,37 @@
+
+
+    1)  GET /api/v1/captcha
+        "Response":
+            {
+                "ip": "000.000.000...",
+                "math_problem": "20+3"
+            }
+
+    2)  POST /api/v1/captcha/verify/
+            "Body" :
+                {
+                    "answer": "23"
+                }
+
+            "Response" : 
+                {
+                    "ip": "000.000.000...",
+                    "is_verified": true,
+                    "verificationId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
+                }    
+
+    3)  GET /api/v1/post/:postId/?verificationId="somthinglikes"
+
+    
+
+    4)  GET /api/v1/stats/streams
+            "Response": 
+                [
+                    {
+                        "streamId": 12143
+                        "name": Mirziyoyev tashrifi,
+                        "views": 34052,
+                        "total_profit": 1_032_041,
+                    }
+                ]
+                

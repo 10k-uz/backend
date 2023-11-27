@@ -1,0 +1,14 @@
+1) Permissions
+2) Role
+3) Admins
+4) Categories
+5) Products
+6) Images
+7) Videos
+8) Orders
+9) Sellers
+10) Streams
+11) Requests list by streams
+12) Statistics by streams
+13) Payments
+

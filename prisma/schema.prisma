@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Permissions {
+  id      Int    @id @default(autoincrement())
+  adminId Int?
+  name    String @unique
+
+  admin Admins? @relation(fields: [adminId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Roles {
+  id          Int      @id @default(autoincrement())
+  adminId     Int?
+  name        String   @unique
+  permissions String[]
+
+  admin Admins? @relation(fields: [adminId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Admins {
+  id       Int      @id @default(autoincrement())
+  adminId  Int?     @unique
+  name     String
+  username String   @unique
+  password String
+  roleId   Int?
+  userType UserType @default(ADMIN)
+  balance  Int?     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  admin         Admins? @relation("CreatorAdmin", fields: [adminId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  createdAdmins Admins? @relation("CreatorAdmin")
+
+  Transactions       Transactions[]
+  CreatedRoles       Roles[]
+  CreatedPermissions Permissions[]
+  Categories         Categories[]
+  Posts              Posts[]
+}
+
+model Categories {
+  id      Int    @id @default(autoincrement())
+  adminId Int?
+  name    String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  admin Admins? @relation(fields: [adminId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+
+  Posts Posts[]
+}
+
+model Posts {
+  id            Int     @id @default(autoincrement())
+  adminId       Int?
+  categoryId    Int?
+  title         String
+  descr         String  @db.Text
+  cover_image   String
+  views         Int?    @default(0)
+  isCPA         Boolean @default(true)
+  isActive      Boolean @default(true)
+  ads_post_link String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Categories? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  admin    Admins?     @relation(fields: [adminId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+
+  Streams Streams[]
+  Viewer  Viewers[]
+}
+
+model Images {
+  id        Int    @id @default(autoincrement())
+  image_url String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Promoters {
+  id         Int      @id @default(autoincrement())
+  first_name String
+  last_name  String?
+  email      String   @unique
+  password   String
+  balance    Int      @default(0)
+  userType   UserType @default(PROMOTER)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  streams      Streams[]
+  transactions Transactions[]
+}
+
+model Streams {
+  id         Int    @id @default(autoincrement())
+  postId     Int
+  promoterId Int
+  name       String
+
+  promoter Promoters @relation(fields: [promoterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  post     Posts     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  StreamStats StreamStats[]
+  Viewers     Viewers[]
+}
+
+model StreamStats {
+  id       Int  @id @default(autoincrement())
+  streamId Int  @unique
+  profit   Int
+  views    Int? @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stream Streams @relation(fields: [streamId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Viewers {
+  id         String @id @default(uuid())
+  postId     Int?
+  streamId   Int?
+  ip_address String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post   Posts?   @relation(fields: [postId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  stream Streams? @relation(fields: [streamId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+}
+
+model Transactions {
+  id          Int      @id @default(autoincrement())
+  adminId     Int?
+  promoterId  Int?
+  amount      Int
+  card_number String?
+  card_name   String?
+  status      TrStatus @default(NEW)
+  message     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  admin       Admins?    @relation(fields: [adminId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  adversiters Promoters? @relation(fields: [promoterId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+}
+
+model FinancialAsset {
+  id           Int  @id @default(autoincrement())
+  deposit      Int?
+  bonusPerView Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TrStatus {
+  NEW
+  PAID
+  REJECTED
+}
+
+enum UserType {
+  ADMIN
+  PROMOTER
+}
+
+enum TransactionType {
+  TOP_UP
+  WITHDRAW
+}
