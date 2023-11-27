@@ -12,10 +12,10 @@ export async function balanceAdder(
   streamId?: number,
 ) {
   // find asset first
-  let finAsset = await prisma.financialAsset.findFirst();
-  if (!finAsset) {
-    throw new NotFoundException(`fin-asset is not found!`);
-  }
+  // let finAsset = await prisma.financialAsset.findFirst();
+  // if (!finAsset) {
+  //   throw new NotFoundException(`fin-asset is not found!`);
+  // }
 
   if (userType === 'ADMIN') {
     let findAdmin = await prisma.admins.findUnique({
@@ -60,15 +60,15 @@ export async function balanceAdder(
       },
     });
 
-    // decrease amount from deposit
-    await prisma.financialAsset.update({
-      where: {
-        id: finAsset.id,
-      },
-      data: {
-        deposit: finAsset.deposit - BONUS_PER_VIEW,
-      },
-    });
+    // // decrease amount from deposit
+    // await prisma.financialAsset.update({
+    //   where: {
+    //     id: finAsset.id,
+    //   },
+    //   data: {
+    //     deposit: finAsset.deposit - BONUS_PER_VIEW,
+    //   },
+    // });
 
     // add new amount to history
     await prisma.streamStats.update({
