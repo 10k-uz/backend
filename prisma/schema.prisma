@@ -80,6 +80,8 @@ model Posts {
   isCPA         Boolean @default(true)
   isActive      Boolean @default(true)
   ads_post_link String?
+  source_name   String?
+  source_link   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

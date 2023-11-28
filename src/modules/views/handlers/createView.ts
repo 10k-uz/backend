@@ -33,6 +33,7 @@ export async function createViewHandler(
   streamsService: StreamsService,
 ) {
   const { Ip } = data;
+
   /**
    * Check if the viewer's IP address has already viewed the post.
    * If yes, respond with a 200 status code.

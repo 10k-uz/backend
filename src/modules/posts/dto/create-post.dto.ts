@@ -37,4 +37,12 @@ export class CreatePostDto {
   @IsOptional()
   @IsString()
   ads_post_link: string;
+
+  @IsOptional()
+  @IsString()
+  source_name: string;
+
+  @IsOptional()
+  @IsString()
+  source_link: string;
 }
