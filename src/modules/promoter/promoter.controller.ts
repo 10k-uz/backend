@@ -37,7 +37,7 @@ export class PromoterController {
   constructor(private readonly promotersService: PromotersService) {}
 
   @Post('auth/register')
-  @UseGuards(MailGuard)
+  // @UseGuards(MailGuard)
   async register(@Body() data: PromoterRegisterDto, @Res() res: Response) {
     return await promoterRegister(res, data, this.promotersService);
   }
