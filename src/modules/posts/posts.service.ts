@@ -117,6 +117,9 @@ export class PostsService {
     let startIndex = (page - 1) * limit;
 
     let posts = await this.prisma.posts.findMany({
+      where: {
+        isActive: true,
+      },
       skip: +startIndex,
       take: +limit,
       orderBy: {
