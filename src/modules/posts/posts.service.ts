@@ -122,6 +122,13 @@ export class PostsService {
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     let total_pages = Math.ceil((await this.prisma.posts.count()) / limit);
