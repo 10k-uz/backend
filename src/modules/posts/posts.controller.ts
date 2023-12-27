@@ -21,11 +21,12 @@ import {
   getPosts,
   updatePost,
   getPostByStreamHandler,
+  getPostsForUser,
 } from './handlers';
 import { Response } from 'express';
 import { CategoriesService } from '../categories/categories.service';
 import { PostsGuard } from './posts.guard';
-import { UserRequest } from 'src/interfaces';
+import { UserRequest, paginationData } from 'src/interfaces';
 import { Perms } from 'src/decorators';
 import { PermsGuard } from 'src/guards';
 import { StreamsService } from '../streams/streams.service';
@@ -88,6 +89,11 @@ export class PostsController {
       keyword,
       role,
     });
+  }
+
+  @Get('/user')
+  async getPostsForUser(@Res() res: Response, @Query() data: paginationData) {
+    return await getPostsForUser(res, this.postsService, data);
   }
 
   @Get('common/:id')

@@ -4,3 +4,4 @@ export * from './getPostById';
 export * from './updatePost';
 export * from './deletePostById';
 export * from './getPostByStream';
+export * from './getPostsForUser';

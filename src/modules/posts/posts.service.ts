@@ -109,6 +109,36 @@ export class PostsService {
     return response;
   }
 
+  async getForUser(page: number = 1, limit: number = 10) {
+    if (page == 0) {
+      page = 1;
+    }
+
+    let startIndex = (page - 1) * limit;
+
+    let posts = await this.prisma.posts.findMany({
+      skip: +startIndex,
+      take: +limit,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    let total_pages = Math.ceil((await this.prisma.posts.count()) / limit);
+    let total_length = await this.prisma.posts.count();
+    let found_results = posts.length;
+
+    return {
+      meta: {
+        current_page: +page,
+        total_pages,
+        total_length,
+        found_results,
+      },
+      posts,
+    };
+  }
+
   async findById(id: number) {
     return await this.prisma.posts.findUnique({
       where: {
